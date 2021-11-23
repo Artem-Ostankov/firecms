@@ -1,5 +1,5 @@
 {
-    "name": "firecms",
+    "name": "@artem-ostankov/firecms",
     "version": "1.0.0-beta5",
     "description": "Awesome Firebase/Firestore-based headless open-source CMS",
     "author": "camberi",
