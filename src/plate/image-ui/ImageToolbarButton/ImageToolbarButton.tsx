@@ -23,16 +23,18 @@ export const ImageToolbarButton = ({ getImageUrl, ...props }: ImageToolbarButton
     altText,
     imgId,
   }) => {
-    const image = {
-      type: getPlatePluginType(editor, ELEMENT_IMAGE),
-      url,
-      children: [{ text: '' }],
-      align,
-      altText,
-      imgId,
-    }
-    insertNodes<TElement>(editor, image)
-    close()
+      if(editor){
+          const image = {
+              type: getPlatePluginType(editor, ELEMENT_IMAGE),
+              url,
+              children: [{ text: '' }],
+              align,
+              altText,
+              imgId,
+          }
+          insertNodes<TElement>(editor, image)
+          close()
+      }
   }
 
   return (
