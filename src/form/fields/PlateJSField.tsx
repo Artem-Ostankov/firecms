@@ -266,7 +266,7 @@ const BallonToolbarMarks = () => {
  * and tables to the specified properties.
  * @category Form fields
  */
-export default function PlateJSField({
+export const PlateJSField: FC<EditorJSFieldProps> = ({
   name,
   value,
   setValue,
@@ -280,7 +280,7 @@ export default function PlateJSField({
   includeDescription,
   context,
   dependsOnOtherProperties,
-}: EditorJSFieldProps) {
+}) => {
   const classes = useStyles()
   const [open, setOpen] = useState(false)
 
@@ -372,3 +372,5 @@ export default function PlateJSField({
     </FormControl>
   )
 }
+
+export default PlateJSField

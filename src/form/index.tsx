@@ -11,6 +11,7 @@ import { ReadOnlyField } from "./fields/ReadOnlyField";
 import { ArrayOfReferencesField } from "./fields/ArrayOfReferencesField";
 import { ArrayOneOfField } from "./fields/ArrayOneOfField";
 import { MarkdownField } from "./fields/MarkdownField";
+import { PlateJSField } from "./fields/PlateJSField";
 
 export {
     ArrayDefaultField,
@@ -25,7 +26,8 @@ export {
     StorageUploadField,
     SwitchField,
     MarkdownField,
-    TextField
+    TextField,
+    PlateJSField
 };
 
 export * from "./components";
