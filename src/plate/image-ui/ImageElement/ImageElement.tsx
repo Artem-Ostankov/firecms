@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useMemo, useState } from 'react'
+import React, { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import CloseIcon from '@mui/icons-material/Close'
 import FileUploadIcon from '@mui/icons-material/FileUpload'
@@ -49,7 +49,7 @@ const getColor = (props: {
     return '#eeeeee'
 }
 
-export const ImageElement: FC<ImageElementProps> = (props: ImageElementProps) => {
+export const ImageElement: FunctionComponent<ImageElementProps> = (props: ImageElementProps) => {
     const {
         attributes,
         children,
@@ -274,7 +274,6 @@ export const ImageSettingsDialog: React.FC<ImageSettingsDialogProps> = ({
     }
 
     const onDelete = () => {
-        console.log('imageId', imgId)
         if (imgIdValue) {
             // storage.removeFile({ filePath: imgIdValue }).then(() => {
             //   deleteSelf()
@@ -286,7 +285,6 @@ export const ImageSettingsDialog: React.FC<ImageSettingsDialogProps> = ({
     const onDrop = useCallback(
         (acceptedFiles: Array<File>) => {
             // Do something with the files
-            console.log(acceptedFiles)
             if (acceptedFiles.length === 1) {
                 const file = acceptedFiles[0]
                 upload(file, file.name)

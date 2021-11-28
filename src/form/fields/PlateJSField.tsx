@@ -1,4 +1,4 @@
-import React, { Fragment, useRef, useState } from 'react'
+import React, {FC, Fragment, useRef, useState} from 'react'
 import {
   Backdrop,
   Box,
@@ -222,7 +222,7 @@ const components = createPlateComponents({
       ],
     },
   }),
-  [ELEMENT_IMAGE]: ImageElement,
+  [ELEMENT_IMAGE]: ImageElement as FC<any>,
 })
 
 const BallonToolbarMarks = () => {
@@ -298,8 +298,6 @@ export default function PlateJSField({
       setValue(newValue)
     }
   }
-
-  console.log(value != null ? JSON.parse(value) : undefined)
 
   const editor = (
     <div className={classes.root}>

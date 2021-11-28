@@ -1,6 +1,6 @@
 {
     "name": "@artem-ostankov/firecms",
-    "version": "1.0.0-beta5",
+    "version": "1.0.1",
     "description": "Awesome Firebase/Firestore-based headless open-source CMS",
     "author": "camberi",
     "license": "MIT",
