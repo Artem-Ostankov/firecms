@@ -30,7 +30,6 @@ import { useStorageSource } from '../../../hooks'
 import { getImageElementStyles } from './ImageElement.styles'
 import { ImageElementProps } from './ImageElement.types'
 import { ImageHandle } from './ImageHandle'
-import { styled } from '@mui/system'
 
 const getColor = (props: {
     isDragActive: boolean
@@ -151,13 +150,11 @@ export const ImageElement: FunctionComponent<ImageElementProps> = (props: ImageE
                         handleComponent={{
                             left: (
                                 <ImageHandle
-                                    css={[styles.handleLeft?.css]}
                                     className={styles.handleLeft?.className}
                                 />
                             ),
                             right: (
                                 <ImageHandle
-                                    css={styles.handleRight?.css}
                                     className={styles.handleRight?.className}
                                 />
                             ),
