@@ -1,38 +1,27 @@
-import React, { ComponentType, ReactElement, useEffect, useState } from "react";
-import { FormHelperText } from "@mui/material";
+import React, { ComponentType, ReactElement, useEffect, useState } from 'react'
+import { FormHelperText } from '@mui/material'
 
-import {
-    FastField,
-    Field,
-    FieldProps as FormikFieldProps,
-    getIn
-} from "formik";
+import { FastField, Field, FieldProps as FormikFieldProps, getIn } from 'formik'
 
-import {
-    ArrayProperty,
-    CMSFormFieldProps,
-    CMSType,
-    FieldProps,
-    Property
-} from "../models";
+import { ArrayProperty, CMSFormFieldProps, CMSType, FieldProps, Property } from '../models'
 
-import { Select } from "./fields/Select";
-import { ArrayEnumSelect } from "./fields/ArrayEnumSelect";
-import { StorageUploadField } from "./fields/StorageUploadField";
-import { TextField } from "./fields/TextField";
-import { SwitchField } from "./fields/SwitchField";
-import { DateTimeField } from "./fields/DateTimeField";
-import { ReferenceField } from "./fields/ReferenceField";
-import { MapField } from "./fields/MapField";
-import { ArrayDefaultField } from "./fields/ArrayDefaultField";
-import { ArrayOneOfField } from "./fields/ArrayOneOfField";
-import { ReadOnlyField } from "./fields/ReadOnlyField";
-import { MarkdownField } from "./fields/MarkdownField";
+import { Select } from './fields/Select'
+import { ArrayEnumSelect } from './fields/ArrayEnumSelect'
+import { StorageUploadField } from './fields/StorageUploadField'
+import { TextField } from './fields/TextField'
+import { SwitchField } from './fields/SwitchField'
+import { DateTimeField } from './fields/DateTimeField'
+import { ReferenceField } from './fields/ReferenceField'
+import { MapField } from './fields/MapField'
+import { ArrayDefaultField } from './fields/ArrayDefaultField'
+import { ArrayOneOfField } from './fields/ArrayOneOfField'
+import { ReadOnlyField } from './fields/ReadOnlyField'
+import { MarkdownField } from './fields/MarkdownField'
+import { PlateJSField } from './fields/PlateJSField'
 
-import { ArrayOfReferencesField } from "./fields/ArrayOfReferencesField";
-import { isReadOnly } from "../core/utils";
-import deepEqual from "deep-equal";
-
+import { ArrayOfReferencesField } from './fields/ArrayOfReferencesField'
+import { isReadOnly } from '../core/utils'
+import deepEqual from 'deep-equal'
 
 /**
  * This factory method renders a form field creating the corresponding configuration
@@ -60,73 +49,75 @@ import deepEqual from "deep-equal";
  * @param dependsOnOtherProperties
  * @category Form custom fields
  */
-export function buildPropertyField<T extends CMSType = any, M = any>
-({
-     name,
-     property,
-     context,
-     includeDescription,
-     underlyingValueHasChanged,
-     disabled,
-     tableMode,
-     partOfArray,
-     autoFocus,
-     dependsOnOtherProperties
- }: CMSFormFieldProps<M>): ReactElement<CMSFormFieldProps<M>> {
-
-    let component: ComponentType<FieldProps<T, any, M>> | undefined;
+export function buildPropertyField<T extends CMSType = any, M = any>({
+    name,
+    property,
+    context,
+    includeDescription,
+    underlyingValueHasChanged,
+    disabled,
+    tableMode,
+    partOfArray,
+    autoFocus,
+    dependsOnOtherProperties,
+}: CMSFormFieldProps<M>): ReactElement<CMSFormFieldProps<M>> {
+    let component: ComponentType<FieldProps<T, any, M>> | undefined
     if (isReadOnly(property)) {
-        component = ReadOnlyField;
+        component = ReadOnlyField
     } else if (property.config?.Field) {
-        component = property.config?.Field as ComponentType<FieldProps<T>>;
-    } else if (property.dataType === "array") {
-        const of = (property as ArrayProperty).of;
+        component = property.config?.Field as ComponentType<FieldProps<T>>
+    } else if (property.dataType === 'array') {
+        const of = (property as ArrayProperty).of
         if (of) {
-            if ((of.dataType === "string" || of.dataType === "number") && of.config?.enumValues) {
-                component = ArrayEnumSelect as ComponentType<FieldProps<T>>;
-            } else if (of.dataType === "string" && of.config?.storageMeta) {
-                component = StorageUploadField as ComponentType<FieldProps<T>>;
-            } else if (of.dataType === "reference") {
-                component = ArrayOfReferencesField as ComponentType<FieldProps<T>>;
+            if ((of.dataType === 'string' || of.dataType === 'number') && of.config?.enumValues) {
+                component = ArrayEnumSelect as ComponentType<FieldProps<T>>
+            } else if (of.dataType === 'string' && of.config?.storageMeta) {
+                component = StorageUploadField as ComponentType<FieldProps<T>>
+            } else if (of.dataType === 'reference') {
+                component = ArrayOfReferencesField as ComponentType<FieldProps<T>>
             } else {
-                component = ArrayDefaultField as ComponentType<FieldProps<T>>;
+                component = ArrayDefaultField as ComponentType<FieldProps<T>>
             }
         }
-        const oneOf = (property as ArrayProperty).oneOf;
+        const oneOf = (property as ArrayProperty).oneOf
         if (oneOf) {
-            component = ArrayOneOfField as ComponentType<FieldProps<T>>;
+            component = ArrayOneOfField as ComponentType<FieldProps<T>>
         }
         if (!of && !oneOf) {
-            throw Error(`You need to specify an 'of' or 'oneOf' prop (or specify a custom field) in your array property ${name}`);
+            throw Error(
+                `You need to specify an 'of' or 'oneOf' prop (or specify a custom field) in your array property ${name}`,
+            )
         }
-    } else if (property.dataType === "map") {
-        component = MapField as ComponentType<FieldProps<T>>;
-    } else if (property.dataType === "reference") {
-        component = ReferenceField as ComponentType<FieldProps<T>>;
-    } else if (property.dataType === "timestamp") {
-        component = DateTimeField as ComponentType<FieldProps<T>>;
-    } else if (property.dataType === "boolean") {
-        component = SwitchField as ComponentType<FieldProps<T>>;
-    } else if (property.dataType === "number") {
+    } else if (property.dataType === 'map') {
+        component = MapField as ComponentType<FieldProps<T>>
+    } else if (property.dataType === 'reference') {
+        component = ReferenceField as ComponentType<FieldProps<T>>
+    } else if (property.dataType === 'timestamp') {
+        component = DateTimeField as ComponentType<FieldProps<T>>
+    } else if (property.dataType === 'boolean') {
+        component = SwitchField as ComponentType<FieldProps<T>>
+    } else if (property.dataType === 'number') {
         if (property.config?.enumValues) {
-            component = Select as ComponentType<FieldProps<T>>;
+            component = Select as ComponentType<FieldProps<T>>
         } else {
-            component = TextField as ComponentType<FieldProps<T>>;
+            component = TextField as ComponentType<FieldProps<T>>
         }
-    } else if (property.dataType === "string") {
+    } else if (property.dataType === 'string') {
         if (property.config?.storageMeta) {
-            component = StorageUploadField as ComponentType<FieldProps<T>>;
+            component = StorageUploadField as ComponentType<FieldProps<T>>
         } else if (property.config?.markdown) {
-            component = MarkdownField as ComponentType<FieldProps<T>>;
+            component = MarkdownField as ComponentType<FieldProps<T>>
+        }
+        if (property.config?.plate) {
+            component = PlateJSField as ComponentType<FieldProps<T>>
         } else if (property.config?.enumValues) {
-            component = Select as ComponentType<FieldProps<T>>;
+            component = Select as ComponentType<FieldProps<T>>
         } else {
-            component = TextField as ComponentType<FieldProps<T>>;
+            component = TextField as ComponentType<FieldProps<T>>
         }
     }
 
     if (component) {
-
         const componentProps = {
             name,
             property,
@@ -137,12 +128,13 @@ export function buildPropertyField<T extends CMSType = any, M = any>
             tableMode,
             partOfArray,
             autoFocus,
-            dependsOnOtherProperties
-        };
+            dependsOnOtherProperties,
+        }
 
         // we use the standard Field for user defined fields, since it rebuilds
         // when there are changes in other values, in contrast to FastField
-        const FieldComponent = dependsOnOtherProperties || property.config?.Field ? Field : FastField;
+        const FieldComponent =
+            dependsOnOtherProperties || property.config?.Field ? Field : FastField
 
         return (
             <FieldComponent
@@ -151,90 +143,81 @@ export function buildPropertyField<T extends CMSType = any, M = any>
                 name={`${name}`}
             >
                 {(fieldProps: FormikFieldProps<T>) => {
-                    return <FieldInternal
-                        component={component as ComponentType<FieldProps<T>>}
-                        componentProps={componentProps}
-                        fieldProps={fieldProps}/>;
+                    return (
+                        <FieldInternal
+                            component={component as ComponentType<FieldProps<T>>}
+                            componentProps={componentProps}
+                            fieldProps={fieldProps}
+                        />
+                    )
                 }}
             </FieldComponent>
-        );
-
+        )
     }
 
-    return (
-        <div>{`Currently the field ${property.dataType} is not supported`}</div>
-    );
+    return <div>{`Currently the field ${property.dataType} is not supported`}</div>
 }
 
+function FieldInternal<T extends CMSType, M extends { [Key: string]: any }>({
+    component,
+    componentProps: {
+        name,
+        property,
+        includeDescription,
+        underlyingValueHasChanged,
+        tableMode,
+        partOfArray,
+        autoFocus,
+        context,
+        disabled,
+        dependsOnOtherProperties,
+    },
+    fieldProps,
+}: {
+    component: ComponentType<FieldProps<T>>
+    componentProps: CMSFormFieldProps<M>
+    fieldProps: FormikFieldProps<T>
+}) {
+    const customFieldProps: any = property.config?.customProps
+    const value = fieldProps.field.value
+    const initialValue = fieldProps.meta.initialValue
+    const error = getIn(fieldProps.form.errors, name)
+    const touched = getIn(fieldProps.form.touched, name)
 
-function FieldInternal<T extends CMSType, M extends { [Key: string]: any }>
-({
-     component,
-     componentProps: {
-         name,
-         property,
-         includeDescription,
-         underlyingValueHasChanged,
-         tableMode,
-         partOfArray,
-         autoFocus,
-         context,
-         disabled,
-         dependsOnOtherProperties
-     },
-     fieldProps
+    const showError: boolean =
+        error &&
+        (fieldProps.form.submitCount > 0 || property.validation?.unique) &&
+        (!Array.isArray(error) || !!error.filter((e: any) => !!e).length)
 
- }:
-     {
-         component: ComponentType<FieldProps<T>>,
-         componentProps: CMSFormFieldProps<M>,
-         fieldProps: FormikFieldProps<T>
-     }) {
+    const isSubmitting = fieldProps.form.isSubmitting
 
-    const customFieldProps: any = property.config?.customProps;
-    const value = fieldProps.field.value;
-    const initialValue = fieldProps.meta.initialValue;
-    const error = getIn(fieldProps.form.errors, name);
-    const touched = getIn(fieldProps.form.touched, name);
+    const disabledTooltip: string | undefined =
+        typeof property.disabled === 'object' ? property.disabled.disabledMessage : undefined
 
-    const showError: boolean = error
-        && (fieldProps.form.submitCount > 0 || property.validation?.unique)
-        && (!Array.isArray(error) || !!error.filter((e: any) => !!e).length);
+    const [internalValue, setInternalValue] = useState<T | null>(value)
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            fieldProps.form.setFieldValue(name, internalValue)
+        }, 50)
 
-    const isSubmitting = fieldProps.form.isSubmitting;
+        return () => {
+            clearTimeout(handler)
+        }
+    }, [internalValue])
 
-    const disabledTooltip: string | undefined = typeof property.disabled === "object" ? property.disabled.disabledMessage : undefined;
-
-    const [internalValue, setInternalValue] = useState<T | null>(value);
-    useEffect(
-        () => {
-            const handler = setTimeout(() => {
-                fieldProps.form.setFieldValue(name, internalValue);
-            }, 50);
-
-            return () => {
-                clearTimeout(handler);
-            };
-        },
-        [internalValue]
-    );
-
-    useEffect(
-        () => {
-            if (!deepEqual(value, internalValue)) {
-                setInternalValue(value);
-            }
-        },
-        [value]
-    );
+    useEffect(() => {
+        if (!deepEqual(value, internalValue)) {
+            setInternalValue(value)
+        }
+    }, [value])
 
     const cmsFieldProps: FieldProps<T> = {
         name,
         value: internalValue as T,
         initialValue,
         setValue: (value: T | null) => {
-            fieldProps.form.setFieldTouched(name, true, false);
-            setInternalValue(value);
+            fieldProps.form.setFieldTouched(name, true, false)
+            setInternalValue(value)
         },
         error,
         touched,
@@ -249,20 +232,16 @@ function FieldInternal<T extends CMSType, M extends { [Key: string]: any }>
         autoFocus: autoFocus ?? false,
         customProps: customFieldProps,
         context,
-        dependsOnOtherProperties: dependsOnOtherProperties ?? true
-    };
+        dependsOnOtherProperties: dependsOnOtherProperties ?? true,
+    }
 
     return (
         <>
-
             {React.createElement(component, cmsFieldProps)}
 
-            {underlyingValueHasChanged && !isSubmitting &&
-            <FormHelperText>
-                This value has been updated elsewhere
-            </FormHelperText>}
-
-        </>);
-
+            {underlyingValueHasChanged && !isSubmitting && (
+                <FormHelperText>This value has been updated elsewhere</FormHelperText>
+            )}
+        </>
+    )
 }
-

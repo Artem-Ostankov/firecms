@@ -1,7 +1,7 @@
-import { FieldProps } from "./fields";
-import { PreviewComponentProps } from "../preview";
-import { ChipColor } from "./colors";
-import { EntityReference, EntityValues, GeoPoint } from "./entities";
+import { FieldProps } from './fields'
+import { PreviewComponentProps } from '../preview'
+import { ChipColor } from './colors'
+import { EntityReference, EntityValues, GeoPoint } from './entities'
 
 /**
  * @category Entity properties
@@ -14,112 +14,114 @@ export type CMSType =
     | GeoPoint
     | EntityReference
     | { [Key: string]: any }
-    | CMSType[];
+    | CMSType[]
 
 /**
  * @ignore
  */
 export type AnyProperty =
-    StringProperty |
-    NumberProperty |
-    BooleanProperty |
-    TimestampProperty |
-    GeopointProperty |
-    ReferenceProperty |
-    ArrayProperty |
-    MapProperty;
+    | StringProperty
+    | NumberProperty
+    | BooleanProperty
+    | TimestampProperty
+    | GeopointProperty
+    | ReferenceProperty
+    | ArrayProperty
+    | MapProperty
 
 /**
  * @category Entity properties
  */
-export type Property<T extends CMSType = CMSType> =
-    T extends string ? StringProperty :
-        T extends number ? NumberProperty :
-            T extends boolean ? BooleanProperty :
-                T extends Date ? TimestampProperty :
-                    T extends GeoPoint ? GeopointProperty :
-                        T extends EntityReference ? ReferenceProperty :
-                            T extends Array<CMSType> ? ArrayProperty<T> :
-                                T extends { [Key: string]: any } ? MapProperty<T> : AnyProperty;
+export type Property<T extends CMSType = CMSType> = T extends string
+    ? StringProperty
+    : T extends number
+    ? NumberProperty
+    : T extends boolean
+    ? BooleanProperty
+    : T extends Date
+    ? TimestampProperty
+    : T extends GeoPoint
+    ? GeopointProperty
+    : T extends EntityReference
+    ? ReferenceProperty
+    : T extends Array<CMSType>
+    ? ArrayProperty<T>
+    : T extends { [Key: string]: any }
+    ? MapProperty<T>
+    : AnyProperty
 
 /**
  * @category Entity properties
  */
 export type DataType =
-    | "number"
-    | "string"
-    | "boolean"
-    | "map"
-    | "array"
-    | "timestamp"
-    | "geopoint"
-    | "reference";
+    | 'number'
+    | 'string'
+    | 'boolean'
+    | 'map'
+    | 'array'
+    | 'timestamp'
+    | 'geopoint'
+    | 'reference'
 
 /**
  * @category Entity properties
  */
-export type MediaType =
-    | "image"
-    | "video"
-    | "audio";
+export type MediaType = 'image' | 'video' | 'audio'
 
 /**
  * Interface including all common properties of a CMS property
  * @category Entity properties
  */
 interface BaseProperty {
-
     /**
      * Datatype of the property
      */
-    dataType: DataType;
+    dataType: DataType
 
     /**
      * Property title (e.g. Product)
      */
-    title?: string;
+    title?: string
 
     /**
      * Property description, always displayed under the field
      */
-    description?: string;
+    description?: string
 
     /**
      * Longer description of a field, displayed under a popover
      */
-    longDescription?: string;
+    longDescription?: string
 
     /**
      * Width in pixels of this column in the collection view. If not set
      * the width is inferred based on the other configurations
      */
-    columnWidth?: number;
+    columnWidth?: number
 
     /**
      * Is this a read only property. When set to true, it gets rendered as a
      * preview.
      */
-    readOnly?: boolean;
+    readOnly?: boolean
 
     /**
      * Is this field disabled. When set to true, it gets rendered as a
      * disabled field. You can also specify a configuration for defining the
      * behaviour of disabled properties
      */
-    disabled?: boolean | PropertyDisabledConfig;
+    disabled?: boolean | PropertyDisabledConfig
 
     /**
      * Rules for validating this property
      */
-    validation?: PropertyValidationSchema;
-
+    validation?: PropertyValidationSchema
 }
 
 /**
  * @category Entity properties
  */
 export interface PropertyDisabledConfig {
-
     /**
      * Enable this flag if you would like to clear the value of the field
      * when the corresponding property gets disabled.
@@ -127,24 +129,24 @@ export interface PropertyDisabledConfig {
      * This is useful for keeping data consistency when you have conditional
      * properties.
      */
-    clearOnDisabled?: boolean;
+    clearOnDisabled?: boolean
 
     /**
      * Explanation of why this property is disabled (e.g. a different field
      * needs to be enabled)
      */
-    disabledMessage?: string;
+    disabledMessage?: string
 
     /**
      * Set this flag to true if you want to hide this field when disabled
      */
-    hidden?: boolean;
+    hidden?: boolean
 }
 
 /**
  * @category Entity properties
  */
-export type EnumType = number | string;
+export type EnumType = number | string
 
 /**
  * We use this type to define mapping between string or number values in
@@ -159,17 +161,17 @@ export type EnumType = number | string;
  * @category Entity properties
  */
 export type EnumValues =
-    Record<string | number, string | EnumValueConfig>
-    | Map<string | number, string | EnumValueConfig>;
+    | Record<string | number, string | EnumValueConfig>
+    | Map<string | number, string | EnumValueConfig>
 
 /**
  * Configuration for a particular entry in an `EnumValues`
  * @category Entity properties
  */
 export interface EnumValueConfig {
-    label: string;
-    disabled?: boolean;
-    color?: ChipColor;
+    label: string
+    disabled?: boolean
+    color?: ChipColor
 }
 
 /**
@@ -177,103 +179,95 @@ export interface EnumValueConfig {
  * @category Entity properties
  */
 export type Properties<M extends { [Key: string]: any } = any> = {
-    [k in keyof M]: Property<M[k]>;
-};
+    [k in keyof M]: Property<M[k]>
+}
 
 /**
  * @category Entity properties
  */
-export type PropertyBuilderProps<T, M extends { [Key: string]: any }> =
-    {
-        values: Partial<M>;
-        path: string;
-        entityId?: string;
-    };
+export type PropertyBuilderProps<T, M extends { [Key: string]: any }> = {
+    values: Partial<M>
+    path: string
+    entityId?: string
+}
 /**
  * @category Entity properties
  */
 export type PropertyBuilder<T extends CMSType, M> = ({
-                                                         values,
-                                                         path,
-                                                         entityId
-                                                     }: PropertyBuilderProps<T, M>) => Property<T>;
+    values,
+    path,
+    entityId,
+}: PropertyBuilderProps<T, M>) => Property<T>
 
 /**
  * @category Entity properties
  */
-export type PropertyOrBuilder<T extends CMSType, M> =
-    Property<T>
-    | PropertyBuilder<T, M>;
+export type PropertyOrBuilder<T extends CMSType, M> = Property<T> | PropertyBuilder<T, M>
 
 /**
  * @category Entity properties
  */
-export type PropertiesOrBuilder<M extends { [Key: string]: any }> =
-    {
-        [k in keyof M]: PropertyOrBuilder<M[k], M>;
-    };
+export type PropertiesOrBuilder<M extends { [Key: string]: any }> = {
+    [k in keyof M]: PropertyOrBuilder<M[k], M>
+}
 
 /**
  * @category Entity properties
  */
 export interface NumberProperty extends BaseProperty {
-
-    dataType: "number";
+    dataType: 'number'
 
     /**
      * Configure how this field is displayed
      */
-    config?: NumberFieldConfig;
+    config?: NumberFieldConfig
 
     /**
      * Rules for validating this property
      */
-    validation?: NumberPropertyValidationSchema,
-
+    validation?: NumberPropertyValidationSchema
 }
 
 /**
  * @category Entity properties
  */
 export interface BooleanProperty extends BaseProperty {
-
-    dataType: "boolean";
+    dataType: 'boolean'
 
     /**
      * Rules for validating this property
      */
-    validation?: PropertyValidationSchema,
+    validation?: PropertyValidationSchema
 
     /**
      * Configure how this property field is displayed
      */
-    config?: FieldConfig<boolean>;
+    config?: FieldConfig<boolean>
 }
 
 /**
  * @category Entity properties
  */
 export interface StringProperty extends BaseProperty {
-
-    dataType: "string";
+    dataType: 'string'
 
     /**
      * Configure how this field is displayed
      */
-    config?: StringFieldConfig;
+    config?: StringFieldConfig
 
     /**
      * Rules for validating this property
      */
-    validation?: StringPropertyValidationSchema,
+    validation?: StringPropertyValidationSchema
 }
 
 /**
  * @category Entity properties
  */
-export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSType = any> extends BaseProperty {
-
-    dataType: "array";
+export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSType = any>
+    extends BaseProperty {
+    dataType: 'array'
 
     /**
      * The property of this array.
@@ -281,7 +275,7 @@ export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSTyp
      * You can leave this field empty only if you are providing a custom field,
      * otherwise an error will be thrown.
      */
-    of?: Property<ArrayT>;
+    of?: Property<ArrayT>
 
     /**
      * Use this field if you would like to have an array of properties.
@@ -303,68 +297,67 @@ export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSTyp
          * Record of properties, where the key is the `type` and the value
          * is the corresponding property
          */
-        properties: Record<string, Property>;
+        properties: Record<string, Property>
         /**
          * Name of the field to use as the discriminator for type
          * Defaults to `type`
          */
-        typeField?: string;
+        typeField?: string
         /**
          * Name of the  field to use as the value
          * Defaults to `value`
          */
-        valueField?: string;
-    };
+        valueField?: string
+    }
 
     /**
      * Rules for validating this property
      */
-    validation?: ArrayPropertyValidationSchema,
+    validation?: ArrayPropertyValidationSchema
 
     /**
      * Configure how this property field is displayed
      */
-    config?: FieldConfig<T>;
+    config?: FieldConfig<T>
 }
 
 /**
  * @category Entity properties
  */
 export interface MapProperty<T extends { [Key: string]: any } = any> extends BaseProperty {
-
-    dataType: "map";
+    dataType: 'map'
 
     /**
      * Record of properties included in this map.
      */
-    properties?: Properties<Partial<T>>; // TODO: this should be Properties<T> but it breaks if building properties without `buildProperties`
+    properties?: Properties<Partial<T>> // TODO: this should be Properties<T> but it breaks if building properties without `buildProperties`
 
     /**
      * Rules for validating this property
      */
-    validation?: PropertyValidationSchema,
+    validation?: PropertyValidationSchema
 
     /**
      * Properties that are displayed when as a preview
      */
-    previewProperties?: Extract<keyof T, string>[];
+    previewProperties?: Extract<keyof T, string>[]
 
     /**
      * Configure how this property field is displayed
      */
-    config?: MapFieldConfig<T>;
+    config?: MapFieldConfig<T>
 }
 
 /**
  * @category Entity properties
  */
 export interface TimestampProperty extends BaseProperty {
-    dataType: "timestamp";
+    dataType: 'timestamp'
 
     /**
      * Rules for validating this property
      */
-    validation?: TimestampPropertyValidationSchema;
+    validation?: TimestampPropertyValidationSchema
 
     /**
      * If this flag is  set to `on_create` or `on_update` this timestamp is
@@ -372,12 +365,12 @@ export interface TimestampProperty extends BaseProperty {
      * update (including creation). Useful for creating `created_on` or
      * `updated_on` fields
      */
-    autoValue?: "on_create" | "on_update"
+    autoValue?: 'on_create' | 'on_update'
 
     /**
      * Configure how this property field is displayed
      */
-    config?: FieldConfig<Date>;
+    config?: FieldConfig<Date>
 }
 
 /**
@@ -385,26 +378,24 @@ export interface TimestampProperty extends BaseProperty {
  */
 // TODO: currently this is the only unsupported field
 export interface GeopointProperty extends BaseProperty {
-    dataType: "geopoint";
+    dataType: 'geopoint'
 
     /**
      * Rules for validating this property
      */
-    validation?: PropertyValidationSchema,
+    validation?: PropertyValidationSchema
 
     /**
      * Configure how this property field is displayed
      */
-    config?: FieldConfig<GeoPoint>;
+    config?: FieldConfig<GeoPoint>
 }
 
 /**
  * @category Entity properties
  */
-export interface ReferenceProperty<M extends { [Key: string]: any } = any>
-    extends BaseProperty {
-
-    dataType: "reference";
+export interface ReferenceProperty<M extends { [Key: string]: any } = any> extends BaseProperty {
+    dataType: 'reference'
 
     /**
      * Absolute collection path of the collection this reference points to.
@@ -412,19 +403,19 @@ export interface ReferenceProperty<M extends { [Key: string]: any } = any>
      * the filters and search delegate existing there are applied to this view
      * as well.
      */
-    path: string;
+    path: string
 
     /**
      * Properties that need to be rendered when displaying a preview of this
      * reference. If not specified the first 3 are used. Only the first 3
      * specified values are considered.
      */
-    previewProperties?: (keyof M)[];
+    previewProperties?: (keyof M)[]
 
     /**
      * Configure how this property field is displayed
      */
-    config?: FieldConfig<EntityReference>;
+    config?: FieldConfig<EntityReference>
 }
 
 /**
@@ -436,18 +427,18 @@ export interface PropertyValidationSchema {
     /**
      * Is this field required
      */
-    required?: boolean;
+    required?: boolean
 
     /**
      * Customize the required message when the property is not set
      */
-    requiredMessage?: string;
+    requiredMessage?: string
 
     /**
      * If the unique flag is set to `true`, you can only have one entity in the
      * collection with this value.
      */
-    unique?: boolean;
+    unique?: boolean
 
     /**
      * If the uniqueInArray flag is set to `true`, you can only have this value
@@ -455,7 +446,7 @@ export interface PropertyValidationSchema {
      * property is not a child of an `ArrayProperty`. It works on direct
      * children of an `ArrayProperty` or first level children of `MapProperty`
      */
-    uniqueInArray?: boolean;
+    uniqueInArray?: boolean
 }
 
 /**
@@ -463,13 +454,13 @@ export interface PropertyValidationSchema {
  * @category Entity properties
  */
 export interface NumberPropertyValidationSchema extends PropertyValidationSchema {
-    min?: number;
-    max?: number;
-    lessThan?: number;
-    moreThan?: number;
-    positive?: boolean;
-    negative?: boolean;
-    integer?: boolean;
+    min?: number
+    max?: number
+    lessThan?: number
+    moreThan?: number
+    positive?: boolean
+    negative?: boolean
+    integer?: boolean
 }
 
 /**
@@ -477,15 +468,15 @@ export interface NumberPropertyValidationSchema extends PropertyValidationSchema
  * @category Entity properties
  */
 export interface StringPropertyValidationSchema extends PropertyValidationSchema {
-    length?: number;
-    min?: number;
-    max?: number;
-    matches?: RegExp;
-    email?: boolean;
-    url?: boolean;
-    trim?: boolean;
-    lowercase?: boolean;
-    uppercase?: boolean;
+    length?: number
+    min?: number
+    max?: number
+    matches?: RegExp
+    email?: boolean
+    url?: boolean
+    trim?: boolean
+    lowercase?: boolean
+    uppercase?: boolean
 }
 
 /**
@@ -493,8 +484,8 @@ export interface StringPropertyValidationSchema extends PropertyValidationSchema
  * @category Entity properties
  */
 export interface TimestampPropertyValidationSchema extends PropertyValidationSchema {
-    min?: Date;
-    max?: Date;
+    min?: Date
+    max?: Date
 }
 
 /**
@@ -502,8 +493,8 @@ export interface TimestampPropertyValidationSchema extends PropertyValidationSch
  * @category Entity properties
  */
 export interface ArrayPropertyValidationSchema extends PropertyValidationSchema {
-    min?: number;
-    max?: number;
+    min?: number
+    max?: number
 }
 
 /**
@@ -511,7 +502,6 @@ export interface ArrayPropertyValidationSchema extends PropertyValidationSchema 
  * @category Entity properties
  */
 export interface FieldConfig<T extends CMSType, CustomProps = any> {
-
     /**
      * If you need to render a custom field, you can create a component that
      * takes `FieldProps` as props. You receive the value, a function to
@@ -519,20 +509,20 @@ export interface FieldConfig<T extends CMSType, CustomProps = any> {
      * You can customize it by passing custom props that are received
      * in the component.
      */
-    Field?: React.ComponentType<FieldProps<T, CustomProps>>;
+    Field?: React.ComponentType<FieldProps<T, CustomProps>>
 
     /**
      * Configure how a property is displayed as a preview, e.g. in the collection
      * view. You can customize it by passing custom props that are received
      * in the component.
      */
-    Preview?: React.ComponentType<PreviewComponentProps<T, CustomProps>>;
+    Preview?: React.ComponentType<PreviewComponentProps<T, CustomProps>>
 
     /**
      * Additional props that are passed to the components defined in `field`
      * or in `preview`.
      */
-    customProps?: CustomProps;
+    customProps?: CustomProps
 }
 
 /**
@@ -541,20 +531,24 @@ export interface FieldConfig<T extends CMSType, CustomProps = any> {
  * @category Entity properties
  */
 export interface StringFieldConfig extends FieldConfig<string> {
-
     /**
      * Is this string property long enough so it should be displayed in
      * a multiple line field. Defaults to false. If set to true,
      * the number of lines adapts to the content
      */
-    multiline?: boolean;
+    multiline?: boolean
 
     /**
      * Should this string property be displayed as a markdown field. If true,
      * the field is rendered as a text editors that supports markdown highlight
      * syntax. It also includes a preview of the result.
      */
-    markdown?: boolean;
+    markdown?: boolean
+
+    /**
+     * Should this string property be displayed as a plate field.
+     */
+    plate?: boolean
 
     /**
      * You can use the enum values providing a map of possible
@@ -565,25 +559,24 @@ export interface StringFieldConfig extends FieldConfig<string> {
      * colors). If you need to ensure the order of the elements, you can pass
      * a `Map` instead of a plain object.
      */
-    enumValues?: EnumValues;
+    enumValues?: EnumValues
 
     /**
      * You can specify a `StorageMeta` configuration. It is used to
      * indicate that this string refers to a path in Google Cloud Storage.
      */
-    storageMeta?: StorageMeta;
+    storageMeta?: StorageMeta
 
     /**
      * If the value of this property is a URL, you can set this flag to true
      * to add a link, or one of the supported media types to render a preview
      */
-    url?: boolean | MediaType;
+    url?: boolean | MediaType
 
     /**
      * Should this string be rendered as a tag instead of just text.
      */
-    previewAsTag?: boolean;
-
+    previewAsTag?: boolean
 }
 
 /**
@@ -591,34 +584,33 @@ export interface StringFieldConfig extends FieldConfig<string> {
  * @category Entity properties
  */
 export interface StorageMeta {
-
     /**
      * Media type of this reference, used for displaying the preview
      */
-    mediaType?: MediaType;
+    mediaType?: MediaType
 
     /**
      * Absolute path in your bucket. You can specify it directly or use a callback
      */
-    storagePath: string | ((context: UploadedFileContext) => string);
+    storagePath: string | ((context: UploadedFileContext) => string)
 
     /**
      * File MIME types that can be uploaded to this reference
      */
-    acceptedFiles?: StorageFileTypes[];
+    acceptedFiles?: StorageFileTypes[]
 
     /**
      * Specific metadata set in your uploaded file.
      * For the default Firebase implementation, the values passed here are of type
      * `firebase.storage.UploadMetadata`
      */
-    metadata?: any,
+    metadata?: any
 
     /**
      * You can use this callback to customize the uploaded filename
      * @param context
      */
-    fileName?: (context: UploadedFileContext) => string;
+    fileName?: (context: UploadedFileContext) => string
 
     /**
      * When set to true, this flag indicates that the download URL of the file
@@ -627,7 +619,7 @@ export interface StorageMeta {
      * make the URL unusable and lose the original reference to Cloud Storage,
      * so it is not encouraged to use this flag. Defaults to false
      */
-    storeUrl?: boolean,
+    storeUrl?: boolean
 
     /**
      * Post process the path
@@ -642,32 +634,32 @@ export interface UploadedFileContext {
     /**
      * Uploaded file
      */
-    file: File;
+    file: File
 
     /**
      * Property field name
      */
-    name: string;
+    name: string
 
     /**
      * Property related to this upload
      */
-    property: StringProperty | ArrayProperty<string[]>;
+    property: StringProperty | ArrayProperty<string[]>
 
     /**
      * Entity Id is set if the entity already exists
      */
-    entityId?: string;
+    entityId?: string
 
     /**
      * Values of the current entity
      */
-    values: EntityValues<any>;
+    values: EntityValues<any>
 
     /**
      * Storage meta specified by the developer
      */
-    storageMeta: StorageMeta;
+    storageMeta: StorageMeta
 }
 
 /**
@@ -676,7 +668,6 @@ export interface UploadedFileContext {
  * @category Entity properties
  */
 export interface MapFieldConfig<T extends {}> extends FieldConfig<T> {
-
     /**
      * Allow the user to add only some of the keys in this map.
      * By default all properties of the map have the corresponding field in
@@ -684,8 +675,7 @@ export interface MapFieldConfig<T extends {}> extends FieldConfig<T> {
      * Useful for map that can have a lot of subproperties that may not be
      * needed
      */
-    pickOnlySomeKeys?: boolean;
-
+    pickOnlySomeKeys?: boolean
 }
 
 /**
@@ -694,24 +684,22 @@ export interface MapFieldConfig<T extends {}> extends FieldConfig<T> {
  * @category Entity properties
  */
 export type StorageFileTypes =
-    "image/*"
-    | "video/*"
-    | "audio/*"
-    | "application/*"
-    | "text/*"
-    | "font/*"
-    | string;
+    | 'image/*'
+    | 'video/*'
+    | 'audio/*'
+    | 'application/*'
+    | 'text/*'
+    | 'font/*'
+    | string
 
 /**
  * @category Entity properties
  */
 export interface NumberFieldConfig extends FieldConfig<number> {
-
     /**
      * You can use the enum values providing a map of possible
      * exclusive values the property can take, mapped to the label that it is
      * displayed in the dropdown.
      */
-    enumValues?: EnumValues;
-
+    enumValues?: EnumValues
 }
